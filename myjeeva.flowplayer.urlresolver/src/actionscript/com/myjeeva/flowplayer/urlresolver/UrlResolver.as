@@ -119,7 +119,7 @@ package com.myjeeva.flowplayer.urlresolver
 			urlLoader = new URLLoader();
 			
 			//assigning DataFormat
-			urlLoader.dataFormat = URLLoaderDataFormat.BINARY;
+			urlLoader.dataFormat = URLLoaderDataFormat.TEXT;
 			
 			// adding event listeners
 			addURLLoaderListeners();
@@ -173,7 +173,7 @@ package com.myjeeva.flowplayer.urlresolver
 			//ExternalInterface.call("playerMessageBox","in complete call");
 			//ExternalInterface.call("playerMessageBox",e.target.data.toString());
 			trace("URL request completed");	
-			var result:String = urlLoader.data.toString()
+			var result:String = e.target.data.toString()
 			//ExternalInterface.call("playerMessageBox", result);
 			if(StringUtil.stringHasValue(result)) 
 			{	

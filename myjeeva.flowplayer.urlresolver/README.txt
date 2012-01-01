@@ -1,4 +1,4 @@
-www.myjeeva.com
+http://www.myjeeva.com/flowplayer-plugins/
 
 flowplayer-plugins version history:
 

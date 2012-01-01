@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- 
+@author	: Jeeva (jeeva@myjeeva.com)
+@copyright (c) www.myjeeva.com
+-->
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<script type="text/javascript" src="flowplayer-3.2.6.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="style.css">
+<title>Welcome to FlowPlayer URLResolver Plugin Example</title>
+</head>
+<body>
+<a id="player" style="display:block;width:520px;height:330px;" ></a>
+<script type="text/javascript">
+var mediaUrlProvider = escape("http://www.myjeeva.com/demo/flowplayer-plugins/urlresolver/get_media_url.php");
+var urlResolver = "http://www.myjeeva.com/demo/flowplayer-plugins/urlresolver/myjeeva.flowplayer.urlresolver-1.0.0.swf";
+var flowControls = "http://www.myjeeva.com/demo/flowplayer-plugins/urlresolver/flowplayer.controls-3.2.5.swf";
+
+flowplayer("player", "http://releases.flowplayer.org/swf/flowplayer-3.2.7.swf", { 
+
+			// configure clip details
+			clip: { 
+				_turl: mediaUrlProvider,
+				autoPlay: false,
+				autoBuffering: true,				
+				urlResolvers: [ 'myjeeva' ]
+			},
+		
+			// configure plugins here
+			plugins: {
+				myjeeva: {
+					url: urlResolver
+				},
+				controls: {
+		    		url: flowControls,
+					autoHide: false,
+				}
+			}
+		}); 
+</script>
+</body>
+</html>
