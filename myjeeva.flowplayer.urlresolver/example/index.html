@@ -11,17 +11,24 @@
 <title>Welcome to FlowPlayer URLResolver Plugin Example</title>
 </head>
 <body>
+<span style="font-size:10px;text-align:left;font-weight:bold;text-align:left;"><strong>UrlResolver Plugin Live progress update[Status Code]:</strong></span>
+<div id="progress" style="font-size:9px;text-align:left;height:50px;color:orange;font-weight:bold;"></div><br/><br/>
 <a id="player" style="display:block;width:520px;height:330px;" ></a>
 <script type="text/javascript">
 var mediaUrlProvider = escape("http://www.myjeeva.com/demo/flowplayer-plugins/urlresolver/get_media_url.php");
-var urlResolver = "http://www.myjeeva.com/demo/flowplayer-plugins/urlresolver/myjeeva.flowplayer.urlresolver-1.0.0.swf";
+var urlResolver = "http://www.myjeeva.com/demo/flowplayer-plugins/urlresolver/myjeeva.flowplayer.urlresolver-1.0.1.swf";
 var flowControls = "http://www.myjeeva.com/demo/flowplayer-plugins/urlresolver/flowplayer.controls-3.2.5.swf";
+
+function urlResolverProgress(statusCode) {
+	var progress = document.getElementById('progress');
+	progress.innerHTML = progress.innerHTML + '<br/> =>  ' + statusCode;
+}
 
 flowplayer("player", "http://releases.flowplayer.org/swf/flowplayer-3.2.7.swf", { 
 
 			// configure clip details
 			clip: { 
-				_turl: mediaUrlProvider,
+				urlProvider: mediaUrlProvider,
 				autoPlay: false,
 				autoBuffering: true,				
 				urlResolvers: [ 'myjeeva' ]
