@@ -1,9 +1,10 @@
-Just my contribution of plugins to flowplayer
+Extending a Flowplayer for realtime web/media application need!
 
 Plugins List:
 -------------
-1. myjeeva.flowplayer.urlresolver => ClipURLResolver for flowplayer
+1. myjeeva.flowplayer.urlresolver => ClipURLResolver for flowplayer [version 1.0.1 released] for more information refer README.txt in respective plugin base path
 
-Please make use of it!
+
+Kindly make use of it! and let me know your suggestions and thoughts.
 
 ~ www.myjeeva.com ~
