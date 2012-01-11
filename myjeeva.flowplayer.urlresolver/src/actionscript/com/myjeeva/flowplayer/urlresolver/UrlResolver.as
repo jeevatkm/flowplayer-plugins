@@ -1,14 +1,14 @@
 /*
-* URL Resolver plugin for Flowplayer
-*
-* @author		: Jeeva (jeeva@myjeeva.com)* 
-* Desc			: Clip URL resolver for FlowPlayer to resolve the URL at runtime
-* Copyright (c) 2011 www.myjeeva.com
-*
-*    You should have received a copy of the The MIT License
-*    along with this plugin.  If not, see <http://http://www.opensource.org/licenses/mit-license.php>.
-*
-*/
+ * URL Resolver plugin for Flowplayer
+ *
+ * @author		: Jeeva (jeeva@myjeeva.com)
+ * Desc			: Clip URL resolver for FlowPlayer to resolve the URL at runtime
+ * Copyright 	: (c) 2010-2012 www.myjeeva.com
+ *
+ *    You should have received a copy of the The MIT License
+ *    along with this plugin.  If not, see <http://http://www.opensource.org/licenses/mit-license.php>.
+ *
+ */
 
 package com.myjeeva.flowplayer.urlresolver
 {
@@ -19,6 +19,7 @@ package com.myjeeva.flowplayer.urlresolver
 	import flash.events.IOErrorEvent;
 	import flash.events.NetStatusEvent;
 	import flash.events.SecurityErrorEvent;
+	import flash.external.ExternalInterface;
 	import flash.net.URLLoader;
 	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
@@ -44,8 +45,7 @@ package com.myjeeva.flowplayer.urlresolver
 	 */
 	public class UrlResolver extends EventDispatcher implements ClipURLResolver, Plugin
 	{
-		private var log:Log = new Log(this);
-		public static var LOADERROR:String = "error";
+		private var log:Log = new Log(this);		
 		private var urlLoader:URLLoader = null;
 		private var _failureListener:Function;
 		private var _player:Flowplayer;
@@ -75,15 +75,17 @@ package com.myjeeva.flowplayer.urlresolver
 		 */
 		public function resolve(provider:StreamProvider, clip:Clip, successListener:Function):void
 		{	
+			ExternalInterface.call(Constants.JS_PROGRESS_UPDATE_METHOD, Constants.CLIP_RESOLVER_INVOKED);
 			_clip = clip;
 			_successListener = successListener;
-			var requestUrl:String = clip.getCustomProperty("_turl").toString();
+			var requestUrl:String = clip.getCustomProperty(Constants.CLIP_URL_PROVIDER).toString();
 			if(StringUtil.stringHasValue(requestUrl)) 
 			{
 			 	perfromUrlRequest(requestUrl);
 			}
 			else
 			{
+				ExternalInterface.call(Constants.JS_PROGRESS_UPDATE_METHOD, Constants.CLIP_RESOLVER_URLPROVIDER_EMPTY);
 				_player.stop();
 			}
 		}
@@ -127,9 +129,10 @@ package com.myjeeva.flowplayer.urlresolver
 			var variables:URLVariables = new URLVariables();  
 			var request:URLRequest = new URLRequest(requestUrl);             
 			request.method = URLRequestMethod.GET;             
-			request.data = variables   
-				
+			request.data = variables;
+			
 			// loading a request
+			ExternalInterface.call(Constants.JS_PROGRESS_UPDATE_METHOD, Constants.CLIP_URL_PROVIDER_INVOKED);
 			urlLoader.load(request);     
 		}
 		
@@ -158,7 +161,7 @@ package com.myjeeva.flowplayer.urlresolver
 		/** propagates the ERROR event */
 		public function doError():void 
 		{
-			dispatchEvent(new Event(LOADERROR));
+			dispatchEvent(new Event(Constants.LOAD_ERROR));
 		}
 		
 		/**
@@ -170,20 +173,20 @@ package com.myjeeva.flowplayer.urlresolver
 		 */
 		private function completeHandler(e:Event):void
 		{   
-			//ExternalInterface.call("playerMessageBox","in complete call");
-			//ExternalInterface.call("playerMessageBox",e.target.data.toString());
+			ExternalInterface.call(Constants.JS_PROGRESS_UPDATE_METHOD, Constants.CLIP_URL_PROVIDER_RESPONSE_RECEIVED);
 			trace("URL request completed");	
-			var result:String = e.target.data.toString()
-			//ExternalInterface.call("playerMessageBox", result);
+			var result:String = e.target.data.toString();
 			if(StringUtil.stringHasValue(result)) 
-			{	
+			{					
 				_clip.setResolvedUrl(this, StringUtil.trim(result));
 				_successListener(_clip);
+				ExternalInterface.call(Constants.JS_PROGRESS_UPDATE_METHOD, Constants.CLIP_URL_PROVIDER_SUCCESSLISTENER_CALLED);
 				trace("response data: " + result);
 				removeURLLoaderListeners();
 			} 
 			else
 			{
+				ExternalInterface.call(Constants.JS_PROGRESS_UPDATE_METHOD, Constants.CLIP_URL_PROVIDER_ERROROCCURED);
 				_player.stop();
 			}
 		}
