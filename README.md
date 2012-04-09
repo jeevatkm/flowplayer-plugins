@@ -25,8 +25,8 @@ Release Notes
 ####v1.0.1 on Jan 11, 2012
 **New Features**
 
-*   UrlResolver status progress JavaScript callback
-*   '_tUrl' custom property changed to 'urlProvider'
+*   UrlResolver progress thru JavaScript callback
+*   '_tUrl' custom property name refactored to 'urlProvider'
 *   Code design accommdates future extension
 
 **Bug Fixes** 
